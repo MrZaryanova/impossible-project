@@ -5,13 +5,13 @@ double sin(double x) {
     double z = x;
     if (z > 0) { 
         while (z > 3.14) {
-            z - 6.2831;
+           z = z - 6.2831;
         }
     return z - (z * z * z)/6.5 + (z * z * z * z * z)/180;
     } else {
 
         while (-3.14 > z) {
-            z + 6.2831;
+            z = z + 6.2831;
         }
     return z - (z * z * z)/6.5 + (z * z * z * z * z)/180;
     }
