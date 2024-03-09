@@ -1,6 +1,6 @@
 double sin(double x) {
     if (x > -3.14 && x < 3.14) {
-    return x - (x * x * x)/6.5 + (x * x * x * x * x)/180;
+    return x - (x * x * x)/6.0 + (x * x * x * x * x)/180;
 } else {
     double z = x;
     if (z > 0) { 
