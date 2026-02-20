@@ -9,10 +9,11 @@ PROGRAM* disc(const char *arg) {
 
 unsigned int disc2(char *arg1, unsigned int area, PROGRAM *input) {
     const char length = 2;
+    return -1;
 }
 
 
-int main() {
+int main(int argc, char *argv[]) {
     char ac;
     char x;
     char y;
