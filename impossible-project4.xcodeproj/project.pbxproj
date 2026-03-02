@@ -6,20 +6,82 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXCopyFilesBuildPhase section */
-		A09BCD052F48078600D21665 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
+/* Begin PBXBuildFile section */
+		A0BBB7DC2F5533AE00C1393F /* SDL3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BBB7CF2F552F4F00C1393F /* SDL3.xcframework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		A08C4A862F5523E500040845 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			inputFiles = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n";
 		};
-/* End PBXCopyFilesBuildPhase section */
+		A08C4A872F5523E900040845 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+		A08C4A882F5523EA00040845 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+		A08C4A892F5523EA00040845 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+		A08C4A8A2F5523EB00040845 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+		A08C4A8B2F5523EB00040845 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+			);
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
-		A09BCD072F48078600D21665 /* impossible-project4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "impossible-project4"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0BBB7CC2F552E1A00C1393F /* impossible-project4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "impossible-project4"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0BBB7CF2F552F4F00C1393F /* SDL3.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SDL3.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -35,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0BBB7DC2F5533AE00C1393F /* SDL3.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,16 +108,9 @@
 			isa = PBXGroup;
 			children = (
 				A09BCD092F48078600D21665 /* impossible-project4 */,
-				A09BCD082F48078600D21665 /* Products */,
+				A0BBB7CC2F552E1A00C1393F /* impossible-project4 */,
+				A0BBB7CF2F552F4F00C1393F /* SDL3.xcframework */,
 			);
-			sourceTree = "<group>";
-		};
-		A09BCD082F48078600D21665 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A09BCD072F48078600D21665 /* impossible-project4 */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -66,9 +122,14 @@
 			buildPhases = (
 				A09BCD032F48078600D21665 /* Sources */,
 				A09BCD042F48078600D21665 /* Frameworks */,
-				A09BCD052F48078600D21665 /* CopyFiles */,
 			);
 			buildRules = (
+				A08C4A8B2F5523EB00040845 /* PBXBuildRule */,
+				A08C4A8A2F5523EB00040845 /* PBXBuildRule */,
+				A08C4A892F5523EA00040845 /* PBXBuildRule */,
+				A08C4A882F5523EA00040845 /* PBXBuildRule */,
+				A08C4A872F5523E900040845 /* PBXBuildRule */,
+				A08C4A862F5523E500040845 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -79,7 +140,7 @@
 			packageProductDependencies = (
 			);
 			productName = "impossible-project4";
-			productReference = A09BCD072F48078600D21665 /* impossible-project4 */;
+			productReference = A0BBB7CC2F552E1A00C1393F /* impossible-project4 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -105,8 +166,11 @@
 			);
 			mainGroup = A09BCCFE2F48078500D21665;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A0BBA47A2F55283D00C1393F /* XCRemoteSwiftPackageReference "SDL" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = A09BCD082F48078600D21665 /* Products */;
+			productRefGroup = A09BCCFE2F48078500D21665;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -178,6 +242,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -233,6 +298,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -245,6 +311,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -253,6 +327,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -279,6 +361,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A0BBA47A2F55283D00C1393F /* XCRemoteSwiftPackageReference "SDL" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/libsdl-org/SDL";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = A09BCCFF2F48078500D21665 /* Project object */;
 }
