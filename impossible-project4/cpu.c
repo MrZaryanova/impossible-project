@@ -1,13 +1,16 @@
 #include "cpu.h"
 #include <SDL3/SDL_log.h>
+#include <SDL3/SDL_iostream.h>
+#include <SDL3/SDL_filesystem.h>
+#define MEM_SIZE 0x0100000
 
 unsigned char acc;
 unsigned char x;
 unsigned char y;
 unsigned char stack_pointer;
 flag flags;
-unsigned char memory[0x0100000]; // include bytes
-unsigned short program_counter = 0x8000;
+unsigned char memory[MEM_SIZE]; // include bytes
+unsigned short program_counter = 0x8000; // first instruction should be here
 /* The data types above are defined with the assumption
  that a char is one byte, and that a short is two bytes
  
@@ -253,7 +256,6 @@ void decode (unsigned short opcode) {
                         break;
                     case 5: // Load into accumulator
                         acc = operand;
-        
                         flags.zero = acc == 0;
                         flags.negative = (acc >> 7) & 1;
                         break;
@@ -630,20 +632,28 @@ void decode (unsigned short opcode) {
     program_counter += instruction_length;
 }
 
-void testM(void) {
-    program_counter = 0x8000;
-    decode(0x78); // 8001
-    SDL_Log("pc: %d\n", program_counter);
-    decode(0xD8); // 8002
-    SDL_Log("pc: %d\n", program_counter);
-    memory[program_counter + 1] = 0x10;
-    decode(0xA9); // 8004
-    SDL_Log("pc: %d\n", program_counter);
-    memory[8006] = 0x20;
-    decode(0x8D); // 8007
-    SDL_Log("pc: %d\n", program_counter);
-    memory[program_counter + 1] = 0xFF;
-    decode(0xA2);
-    decode(0x9A);
-    // postStats();
+void load(const char* filename) {
+    SDL_IOStream* rom = SDL_IOFromFile(filename, "rb");
+    if (rom == NULL) {
+        SDL_Log("Base path: %s", SDL_GetBasePath());
+        SDL_Log("fail"); // basic error logging, in later stages will crash program
+        }
+    Sint64 size = SDL_GetIOSize(rom);
+
+    for(int i = 0; i < size; i++) {
+        unsigned char value;
+        SDL_ReadIO(rom, &value, 1);
+        memory[32752 + i] = value; /* offset to make sure insturctions start in right place
+                                    eventually we will have to make sure only PRG is loaded into CPU memory*/
+    }
+    SDL_CloseIO(rom);
+    
+}
+
+void run(void) {
+    load("example.nes");
+    while(1) {
+        decode(memory[program_counter]);
+        SDL_Log("instruction %d\n at %d\n", memory[program_counter], program_counter);
+    }
 }

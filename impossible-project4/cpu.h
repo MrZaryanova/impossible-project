@@ -21,5 +21,8 @@ typedef struct flag {
 
 void decode(unsigned short opcode);
 
-void testM(void);
+void load(const char* filename);
+
+void run(void);
+
 #endif
