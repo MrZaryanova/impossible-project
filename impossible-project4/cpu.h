@@ -23,6 +23,12 @@ void decode(unsigned short opcode);
 
 void load(const char* filename);
 
+// ppu functions
+
+void ppu_setMemory(unsigned short address, unsigned char value);
+
+unsigned char ppu_getMemory(unsigned short address);
+
 void run(void);
 
 #endif

@@ -1,4 +1,5 @@
 #include "cpu.h"
+#include "ppu.h"
 #include <SDL3/SDL_log.h>
 #include <SDL3/SDL_iostream.h>
 #include <SDL3/SDL_filesystem.h>
@@ -22,8 +23,6 @@ unsigned short program_counter = 0x8000; // first instruction should be here
  Check follwoing instrctions
  JSR,
  */
-
-
 
 unsigned char get_flag_bits(void) {
     unsigned char val = 0x00;
@@ -93,6 +92,7 @@ void decode (unsigned short opcode) {
                 y--;
                 flags.zero = y == 0;
                 flags.negative = (y >> 7) & 1;
+                SDL_Log("y is %d\n", y);
                 break;
             case 0x98: //  transfer Y to accumulator
                 acc = y;
@@ -149,6 +149,7 @@ void decode (unsigned short opcode) {
                 x--;
                 flags.zero = x == 0;
                 flags.negative = (x >> 7) & 1;
+                SDL_Log("decrementing x to %d\n", x);
                 break;
         }
                 
@@ -603,6 +604,9 @@ void decode (unsigned short opcode) {
                             y = operand;
                             flags.zero = (y == 0);
                             flags.negative = (y >> 7) & 1;
+                            if(opcode == 0xA0 && instruction_length != 2) {
+                                instruction_length = 2;
+                            }
                             break;
                             
                         case 6: // Compare Y
@@ -615,19 +619,37 @@ void decode (unsigned short opcode) {
                         }
                             
                         case 7: // Compare x
-                        {
+                            ;
                             unsigned char result = x - operand;
                             flags.carry = (x >= operand);
                             flags.zero = (result == 0);
                             flags.negative = (result >> 7) & 1;
+                            instruction_length = 2; // CPX is immediate
+                            SDL_Log("comparing x to %d\n", operand);
+                            SDL_Log("going up %d\n", instruction_length);
                             break;
-                        }
+                        
                             
                             
                     }
                     break;
                 }
         }
+        // stuff that doesnt run through
+        
+        if(opcode == 0xCA) {
+            x--;
+            flags.zero = x == 0;
+            flags.negative = (x >> 7) & 1;
+            SDL_Log("decrementing x to %d\n", x);
+        }
+        
+        // ppu stuff - I have no idea how this will be implemented, maybe change later
+        if(addr >= 0x2000 && addr <= 0x2007) {
+            SDL_Log("PPU read/write %d\n", addr);
+            ppu_loop(addr);
+        }
+        
     }
     program_counter += instruction_length;
 }
@@ -650,10 +672,20 @@ void load(const char* filename) {
     
 }
 
+
+void ppu_setMemory(unsigned short address, unsigned char value) {
+    memory[address] = value;
+}
+
+unsigned char ppu_getMemory(unsigned short address) {
+    return memory[address];
+}
+
 void run(void) {
     load("example.nes");
-    while(1) {
-        decode(memory[program_counter]);
+    while(program_counter != 36595) {
         SDL_Log("instruction %d\n at %d\n", memory[program_counter], program_counter);
+        decode(memory[program_counter]);
     }
+    ppuStats();
 }
