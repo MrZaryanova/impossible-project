@@ -32,6 +32,42 @@ unsigned char get_flag_bits(void) {
     
 }
 
+
+
+
+static void storeb(unsigned short addr, unsigned char v) {
+    if (addr == 0x4016) {
+        // io function
+        return;
+    }
+    
+    if(addr >= 0x4000 && addr <= 0x4017) {
+        // apu code here
+        
+        return;
+    }
+    memory[addr] = v;
+}
+
+static unsigned char func_operand(unsigned short address) { // for io stuff
+    // It gets the real operand by making register reads give side effects
+    if (address >= 0x2000 && address <= 0x2007) memory[address]; // ppu get memory function with side effects.
+    switch(address) {
+        case 0x4015:
+            // read side effects, then return address
+            return memory[address];
+            break;
+        case 0x4016:
+            return memory[address]; // io function
+            break;
+        case 0x4017:
+            return memory[address]; // same io function with different parameters
+            break;
+        default:
+            return memory[address];
+    }
+}
+
 void postStats(void) {
  SDL_Log("Acc: %d\n", acc);
  SDL_Log("x: %d\n", x);
@@ -171,28 +207,28 @@ void decode (unsigned short opcode) {
                         ;
                         unsigned char ptr = (zp + x) & 0xFF;
                         addr = memory[ptr] | (memory[(ptr + 1) & 0xFF] << 8);
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         instruction_length = 2;
                         break;
                     case 1: // Zero page
                         addr = zp;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         instruction_length = 2;
                         break;
                     case 3: // absolute;
                         addr = memory[program_counter + 1] | (memory[program_counter + 2] << 8);
                         instruction_length = 3;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         break;
                     case 4: // indirect Y
                         addr = memory[zp] | (memory[(zp + 1) & 0xFF] << 8);
                         addr += y;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         instruction_length = 2;
                         break;
                     case 5: // Zero page x
                         addr = (zp + x) & 0xFF;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         instruction_length = 2;
                         break;
                     case 6: // absolute Y
@@ -200,14 +236,14 @@ void decode (unsigned short opcode) {
 (memory[program_counter + 2] << 8);
                         instruction_length = 3;
                         addr += y;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         break;
                     case 7: //Absolute X
                         addr = memory[program_counter + 1] |
 (memory[program_counter + 2] << 8);
                         instruction_length = 3;
                         addr += x;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         break;
                 }
                 
@@ -252,7 +288,7 @@ void decode (unsigned short opcode) {
                          acc = result;
                         break;
                     case 4: // Store accumulator
-                        memory[addr] = acc;
+                        storeb(addr, acc);
                         break;
                     case 5: // Load into accumulator
                         acc = operand;
@@ -303,7 +339,7 @@ void decode (unsigned short opcode) {
                     case 1: // zero page
                         zp = memory[program_counter + 1];
                         addr = zp;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         instruction_length = 2;
                         break;
                     case 2: // accumulator
@@ -312,7 +348,7 @@ void decode (unsigned short opcode) {
                     case 3: // absolute
                         addr = memory[program_counter + 1] |
                                    (memory[program_counter + 2] << 8);
-                            operand = memory[addr];
+                            operand = func_operand(addr);
                         instruction_length = 3;
                         break;
                     case 5: // zero page x
@@ -321,7 +357,7 @@ void decode (unsigned short opcode) {
                             addr = (zp + y) & 0xFF;
                         else
                             addr = (zp + x) & 0xFF;
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         instruction_length = 2;
                         break;
                     case 7: // absolute x
@@ -334,7 +370,7 @@ void decode (unsigned short opcode) {
                         else
                             addr += x;
                         
-                        operand = memory[addr];
+                        operand = func_operand(addr);
                         break;
                         
                 }
@@ -350,7 +386,7 @@ void decode (unsigned short opcode) {
                         } else {
                             flags.carry = (operand >> 7) & 1;
                             result = operand << 1;
-                            memory[addr] = result;
+                            storeb(addr, result);
                         }
                         
                         flags.zero = (result == 0);
@@ -364,9 +400,8 @@ void decode (unsigned short opcode) {
                         } else {
                             flags.carry = (operand >> 7) & 1;
                             result = (operand << 1) | old_carry;
-                            memory[addr] = result;
+                            storeb(addr, result);
                         }
-                        
                         flags.zero = (result == 0);
                         flags.negative = (result & 0x80) != 0;
                         break;
@@ -378,9 +413,8 @@ void decode (unsigned short opcode) {
                         } else {
                             flags.carry = operand & 1;
                             result = operand >> 1;
-                            memory[addr] = result;
+                            storeb(addr, result);
                         }
-                        
                         flags.zero = (result == 0);
                         flags.negative = 0;  // bit 7 always 0 after LSR
                         break;
@@ -392,14 +426,14 @@ void decode (unsigned short opcode) {
                         } else {
                             flags.carry = operand & 1;
                             result = (operand >> 1) | (old_carry << 7);
-                            memory[addr] = result;
+                            storeb(addr, result);
                         }
                         
                         flags.zero = (result == 0);
                         flags.negative = (result & 0x80) != 0;
                         break;
                     case 4: // Store X
-                        memory[addr] = x;
+                        storeb(addr, x);
                         break;
                     case 5: // load X
                         x = operand;
@@ -407,12 +441,12 @@ void decode (unsigned short opcode) {
                         flags.negative = (x >> 7) & 1;
                         break;
                     case 6: // decrement memory
-                        memory[addr] = operand - 1;
+                        storeb(addr, operand - 1);
                         flags.zero = ((operand - 1) == 0);
                         flags.negative = ((operand - 1) & 0x80) != 0;
                         break;
                     case 7: // increment memory
-                        memory[addr] = operand + 1;
+                        storeb(addr, operand + 1);
                         flags.zero = ((operand + 1) == 0);
                         flags.negative = ((operand + 1) & 0x80) != 0;
                         break;
@@ -542,7 +576,7 @@ void decode (unsigned short opcode) {
                             
                         case 1: // Zero Page
                             addr = memory[program_counter + 1];
-                            operand = memory[addr];
+                            operand = func_operand(addr);
                             instruction_length = 2;
                             break;
                             
@@ -550,12 +584,12 @@ void decode (unsigned short opcode) {
                             addr = memory[program_counter + 1] |
                             (memory[program_counter + 2] << 8);
                             instruction_length = 3;
-                            operand = memory[addr];
+                            operand = func_operand(addr);
                             break;
                             
                         case 5: // Zero Page,X  (used by STY/LDY)
                             addr = (memory[program_counter + 1] + x) & 0xFF;
-                            operand = memory[addr];
+                            operand = func_operand(addr);
                             instruction_length = 2;
                             break;
                             
@@ -564,7 +598,7 @@ void decode (unsigned short opcode) {
                             (memory[program_counter + 2] << 8);
                             instruction_length = 3;
                             addr += x;
-                            operand = memory[addr];
+                            operand = func_operand(addr);
                             break;
                             
                         case 2: // Indirect (JMP only)
@@ -576,7 +610,7 @@ void decode (unsigned short opcode) {
                             
                             // 6502 page boundary bug emulation
                         {
-                            unsigned short lo = memory[addr];
+                            unsigned short lo = func_operand(addr);
                             unsigned short hi = memory[(addr & 0xFF00) |
                                                        ((addr + 1) & 0x00FF)];
                             addr = lo | (hi << 8);
@@ -596,7 +630,7 @@ void decode (unsigned short opcode) {
                             break;
                             
                         case 4: // Store y
-                            memory[addr] = y;
+                            storeb(addr, y);
                             break;
                             
                         case 5: // Load Y
