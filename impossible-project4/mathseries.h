@@ -12,4 +12,7 @@ double sin(double x);
 
 double arcsin(double x);
 
+#define PI 3.14154647314
+
+
 #endif
